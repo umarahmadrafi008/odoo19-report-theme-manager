@@ -7,15 +7,6 @@
         <field name="model">report.theme.profile</field>
         <field name="arch" type="xml">
             <form string="Report Theme Profile">
-                <header>
-                    <button
-                            name="%(action_report_theme_profile)d"
-                            string="Set as Default"
-                            type="object"
-                            class="btn-primary"
-                            attrs="{'invisible': [('is_default', '=', True)]}"
-                    />
-                </header>
                 <sheet>
                     <div class="oe_title">
                         <label for="name"/>
@@ -53,17 +44,13 @@
                             <group>
                                 <group>
                                     <field name="show_header"/>
-                                    <field
-                                            name="header_text"
-                                            attrs="{'invisible': [('show_header', '=', False)]}"
-                                    />
+                                    <field name="header_text"
+                                           invisible="not show_header"/>
                                 </group>
                                 <group>
                                     <field name="show_footer"/>
-                                    <field
-                                            name="footer_text"
-                                            attrs="{'invisible': [('show_footer', '=', False)]}"
-                                    />
+                                    <field name="footer_text"
+                                           invisible="not show_footer"/>
                                 </group>
                             </group>
                         </page>
@@ -72,11 +59,9 @@
                         <page string="RTL &amp; Arabic" name="rtl">
                             <group>
                                 <field name="is_rtl"/>
-                                <field
-                                        name="rtl_font"
-                                        attrs="{'invisible': [('is_rtl', '=', False)],
-                                            'required': [('is_rtl', '=', True)]}"
-                                />
+                                <field name="rtl_font"
+                                       invisible="not is_rtl"
+                                       required="is_rtl"/>
                             </group>
                         </page>
 
@@ -84,15 +69,11 @@
                         <page string="Watermark" name="watermark">
                             <group>
                                 <field name="show_watermark"/>
-                                <field
-                                        name="watermark_text"
-                                        attrs="{'invisible': [('show_watermark', '=', False)],
-                                            'required': [('show_watermark', '=', True)]}"
-                                />
-                                <field
-                                        name="watermark_opacity"
-                                        attrs="{'invisible': [('show_watermark', '=', False)]}"
-                                />
+                                <field name="watermark_text"
+                                       invisible="not show_watermark"
+                                       required="show_watermark"/>
+                                <field name="watermark_opacity"
+                                       invisible="not show_watermark"/>
                             </group>
                         </page>
 
@@ -113,10 +94,10 @@
 
     <!-- ==================== TREE VIEW ==================== -->
     <record id="view_report_theme_profile_tree" model="ir.ui.view">
-        <field name="name">report.theme.profile.tree</field>
+        <field name="name">report.theme.profile.list</field>
         <field name="model">report.theme.profile</field>
         <field name="arch" type="xml">
-            <tree string="Report Theme Profiles">
+            <list string="Report Theme Profiles">
                 <field name="name"/>
                 <field name="company_id"/>
                 <field name="is_default"/>
@@ -126,10 +107,11 @@
                 <field name="apply_to_invoice"/>
                 <field name="apply_to_sale"/>
                 <field name="apply_to_purchase"/>
-            </tree>
+            </list>
         </field>
     </record>
 
+    <!-- ==================== SEARCH VIEW ==================== -->
     <!-- ==================== SEARCH VIEW ==================== -->
     <record id="view_report_theme_profile_search" model="ir.ui.view">
         <field name="name">report.theme.profile.search</field>
@@ -148,27 +130,14 @@
                         name="rtl_only"
                         domain="[('is_rtl', '=', True)]"
                 />
-                <group expand="0" string="Group By">
-                    <filter
-                            string="Company"
-                            name="group_company"
-                            context="{'group_by': 'company_id'}"
-                    />
-                    <filter
-                            string="Font Family"
-                            name="group_font"
-                            context="{'group_by': 'font_family'}"
-                    />
-                </group>
             </search>
         </field>
     </record>
-
     <!-- ==================== ACTION ==================== -->
     <record id="action_report_theme_profile" model="ir.actions.act_window">
         <field name="name">Report Themes</field>
         <field name="res_model">report.theme.profile</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create your first report theme profile
@@ -184,6 +153,7 @@
     <menuitem
             id="menu_report_theme_root"
             name="Report Themes"
+            web_icon="report_theme_manager,static/description/icon.png"
             sequence="90"
     />
     <menuitem

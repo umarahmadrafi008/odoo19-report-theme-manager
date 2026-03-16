@@ -1,32 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
-<!--        Inherit Odoo's native invoice report.-->
-<!--        Wraps the invoice body inside our theme base layout-->
-<!--        only when the company has an active theme with apply_to_invoice enabled.-->
-
-    <template
-        id="report_invoice_inherit_theme"
-        inherit_id="account.report_invoice_document">
-
-        <xpath expr="//div[hasclass('page')]" position="replace">
+    <template id="report_invoice_inherit_theme"
+              inherit_id="account.report_invoice_document">
+        <xpath expr="//div[hasclass('page') and hasclass('mb-4')]" position="before">
             <t t-set="theme" t-value="o.company_id.active_theme_id"/>
-
             <t t-if="theme and theme.apply_to_invoice">
-                <t t-call="report_theme_manager.report_theme_base_layout">
-                    <div class="page o_theme_table">
-                        <t t-raw="0"/>
+                <style t-attf-type="text/css">
+                    .invoice_main { font-family: '<t t-esc="theme.is_rtl and theme.rtl_font or theme.font_family"/>', sans-serif; font-size: <t t-esc="theme.font_size_body"/>pt; direction: <t t-esc="'rtl' if theme.is_rtl else 'ltr'"/>; }
+                    h2, h3, strong { color: <t t-esc="theme.primary_color"/>; }
+                    thead th { background-color: <t t-esc="theme.primary_color"/> !important; color: #fff !important; }
+                    tbody tr:nth-child(even) td { background-color: <t t-esc="theme.secondary_color"/>; }
+                    <t t-if="theme.show_watermark and theme.watermark_text">
+                    .o_watermark { position: fixed; top: 40%; left: 50%; transform: translate(-50%,-50%) rotate(-35deg); font-size: 80pt; font-weight: bold; color: rgba(0,0,0,<t t-esc="theme.watermark_opacity"/>); pointer-events: none; z-index: 9999; white-space: nowrap; }
+                    </t>
+                </style>
+                <t t-if="theme.show_watermark and theme.watermark_text">
+                    <div class="o_watermark"><t t-esc="theme.watermark_text"/></div>
+                </t>
+                <t t-if="theme.show_header and theme.header_text">
+                    <div t-att-style="'background-color:' + theme.primary_color + ';color:#fff;padding:8px 16px;margin-bottom:8px;'">
+                        <t t-out="theme.header_text"/>
                     </div>
                 </t>
             </t>
-
-            <t t-else="">
-                <div class="page">
-                    <t t-raw="0"/>
+        </xpath>
+        <xpath expr="//div[hasclass('page') and hasclass('mb-4')]" position="after">
+            <t t-set="theme" t-value="o.company_id.active_theme_id"/>
+            <t t-if="theme and theme.apply_to_invoice and theme.show_footer and theme.footer_text">
+                <div t-att-style="'border-top:2px solid ' + theme.primary_color + ';padding:6px 16px;font-size:8pt;color:#666;'">
+                    <t t-out="theme.footer_text"/>
                 </div>
             </t>
         </xpath>
-
     </template>
-
 </odoo>

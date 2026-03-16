@@ -23,7 +23,7 @@
         'data/default_theme_data.xml',
         'views/report_theme_profile_views.xml',
         'views/res_config_settings_views.xml',
-        'report/report_base_template.xml',
+        # 'report/report_base_template.xml',
         'report/report_invoice_inherit.xml',
         'report/report_sale_order_inherit.xml',
         'report/report_purchase_order_inherit.xml',
