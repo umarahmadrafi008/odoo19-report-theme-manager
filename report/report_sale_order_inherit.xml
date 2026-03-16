@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!--        Inherit Odoo's native sale order report.-->
+<!--        Wraps the SO body inside our theme base layout-->
+<!--        only when the company has an active theme with apply_to_sale enabled.-->
+
+    <template
+        id="report_sale_order_inherit_theme"
+        inherit_id="sale.report_saleorder_document">
+
+        <xpath expr="//div[hasclass('page')]" position="replace">
+            <t t-set="theme" t-value="o.company_id.active_theme_id"/>
+
+            <t t-if="theme and theme.apply_to_sale">
+                <t t-call="report_theme_manager.report_theme_base_layout">
+                    <div class="page o_theme_table">
+                        <t t-raw="0"/>
+                    </div>
+                </t>
+            </t>
+
+            <t t-else="">
+                <div class="page">
+                    <t t-raw="0"/>
+                </div>
+            </t>
+        </xpath>
+
+    </template>
+
+</odoo>
