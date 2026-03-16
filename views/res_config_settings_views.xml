@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_inherit" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.report.theme</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.action_general_configuration"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block"
+                     data-string="Report Themes"
+                     string="Report Themes"
+                     data-key="report_theme_manager">
+
+                    <h2>Report Theme Manager</h2>
+
+                    <div class="row mt16 o_settings_container">
+
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane"/>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Active Theme</span>
+                                <div class="text-muted">
+                                    Select the default branding theme for all
+                                    PDF reports in this company.
+                                </div>
+                                <div class="content-group mt8">
+                                    <field
+                                        name="active_theme_id"
+                                        widget="many2one"
+                                        domain="[('company_id', '=', allowed_company_ids[0])]"
+                                        options="{'no_create': True}"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane"/>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Manage Themes</span>
+                                <div class="text-muted">
+                                    Create, edit or delete theme profiles
+                                    for your company reports.
+                                </div>
+                                <div class="content-group mt8">
+                                    <button
+                                        name="action_open_report_themes"
+                                        type="object"
+                                        string="Open Theme Profiles"
+                                        class="btn btn-secondary"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!--        Base template for Report Theme Manager.-->
+<!--        All branded reports inherit from this template.-->
+<!--        Theme fields are pulled from the company's active_theme_id.-->
+
+    <template id="report_theme_base_layout">
+        <t t-call="web.html_container">
+            <t t-set="theme" t-value="doc.company_id.active_theme_id"/>
+
+            <!-- Fallback: if no theme assigned, render without branding -->
+            <t t-if="not theme">
+                <t t-call="web.external_layout">
+                    <t t-raw="0"/>
+                </t>
+            </t>
+
+            <t t-if="theme">
+
+                <!-- Inject Google Fonts based on theme font selection -->
+                <style t-attf-type="text/css">
+                    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;family=Lato:wght@400;700&amp;family=Cairo:wght@400;700&amp;family=Tajawal:wght@400;700&amp;family=Amiri:wght@400;700&amp;display=swap');
+
+                    body, .o_report_layout {
+                        font-family: '<t t-esc="theme.is_rtl and theme.rtl_font or theme.font_family"/>', sans-serif;
+                        font-size: <t t-esc="theme.font_size_body"/>pt;
+                        direction: <t t-esc="'rtl' if theme.is_rtl else 'ltr'"/>;
+                    }
+
+                    h1, h2, h3, .o_heading {
+                        font-size: <t t-esc="theme.font_size_heading"/>pt;
+                        color: <t t-esc="theme.primary_color"/>;
+                    }
+
+                    .o_theme_header {
+                        background-color: <t t-esc="theme.primary_color"/>;
+                        color: #ffffff;
+                        padding: 10px 20px;
+                    }
+
+                    .o_theme_table thead th {
+                        background-color: <t t-esc="theme.primary_color"/>;
+                        color: #ffffff;
+                    }
+
+                    .o_theme_table tbody tr:nth-child(even) td {
+                        background-color: <t t-esc="theme.secondary_color"/>;
+                    }
+
+                    .o_theme_footer {
+                        border-top: 2px solid <t t-esc="theme.primary_color"/>;
+                        color: #666666;
+                        font-size: 8pt;
+                        padding: 6px 20px;
+                        text-align: <t t-esc="'right' if theme.is_rtl else 'left'"/>;
+                    }
+
+                    /* Watermark */
+                    <t t-if="theme.show_watermark and theme.watermark_text">
+                    .o_watermark {
+                        position: fixed;
+                        top: 40%;
+                        left: 50%;
+                        transform: translate(-50%, -50%) rotate(-35deg);
+                        font-size: 80pt;
+                        font-weight: bold;
+                        color: rgba(0, 0, 0, <t t-esc="theme.watermark_opacity"/>);
+                        pointer-events: none;
+                        z-index: 9999;
+                        white-space: nowrap;
+                    }
+                    </t>
+                </style>
+
+                <div class="o_report_layout_standard">
+
+                    <!-- Watermark Layer -->
+                    <t t-if="theme.show_watermark and theme.watermark_text">
+                        <div class="o_watermark">
+                            <t t-esc="theme.watermark_text"/>
+                        </div>
+                    </t>
+
+                    <!-- Header -->
+                    <t t-if="theme.show_header">
+                        <div class="o_theme_header">
+                            <t t-if="theme.header_text">
+                                <t t-out="theme.header_text"/>
+                            </t>
+                            <t t-else="">
+                                <span t-esc="doc.company_id.name"/>
+                            </t>
+                        </div>
+                    </t>
+
+                    <!-- Report Body -->
+                    <div class="o_report_body" style="padding: 20px;">
+                        <t t-raw="0"/>
+                    </div>
+
+                    <!-- Footer -->
+                    <t t-if="theme.show_footer">
+                        <div class="o_theme_footer">
+                            <t t-if="theme.footer_text">
+                                <t t-out="theme.footer_text"/>
+                            </t>
+                            <t t-else="">
+                                <span t-esc="doc.company_id.name"/> |
+                                <span t-esc="doc.company_id.phone"/> |
+                                <span t-esc="doc.company_id.email"/>
+                            </t>
+                        </div>
+                    </t>
+
+                </div>
+
+            </t>
+        </t>
+    </template>
+
+</odoo>
