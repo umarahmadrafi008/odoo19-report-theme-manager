@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="default_report_theme" model="report.theme.profile">
+            <field name="name">Default Theme</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="is_default">True</field>
+
+            <!-- Branding -->
+            <field name="primary_color">#1a73e8</field>
+            <field name="secondary_color">#f0f0f0</field>
+
+            <!-- Typography -->
+            <field name="font_family">Roboto</field>
+            <field name="font_size_body">10</field>
+            <field name="font_size_heading">14</field>
+
+            <!-- Header / Footer -->
+            <field name="show_header">True</field>
+            <field name="show_footer">True</field>
+            <field name="header_text"><![CDATA[<p>Your Company Name</p>]]></field>
+            <field name="footer_text"><![CDATA[<p>Thank you for your business.</p>]]></field>
+
+            <!-- RTL -->
+            <field name="is_rtl">False</field>
+
+            <!-- Watermark -->
+            <field name="show_watermark">False</field>
+            <field name="watermark_text">DRAFT</field>
+            <field name="watermark_opacity">0.15</field>
+
+            <!-- Report Assignment -->
+            <field name="apply_to_invoice">True</field>
+            <field name="apply_to_sale">True</field>
+            <field name="apply_to_purchase">True</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== FORM VIEW ==================== -->
+    <record id="view_report_theme_profile_form" model="ir.ui.view">
+        <field name="name">report.theme.profile.form</field>
+        <field name="model">report.theme.profile</field>
+        <field name="arch" type="xml">
+            <form string="Report Theme Profile">
+                <header>
+                    <button
+                            name="%(action_report_theme_profile)d"
+                            string="Set as Default"
+                            type="object"
+                            class="btn-primary"
+                            attrs="{'invisible': [('is_default', '=', True)]}"
+                    />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Corporate Blue"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="General">
+                            <field name="company_id"/>
+                            <field name="is_default"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+
+                        <!-- TAB 1: Branding -->
+                        <page string="Branding" name="branding">
+                            <group>
+                                <group string="Colors">
+                                    <field name="primary_color" widget="color"/>
+                                    <field name="secondary_color" widget="color"/>
+                                </group>
+                                <group string="Typography">
+                                    <field name="font_family"/>
+                                    <field name="font_size_body"/>
+                                    <field name="font_size_heading"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- TAB 2: Header & Footer -->
+                        <page string="Header &amp; Footer" name="header_footer">
+                            <group>
+                                <group>
+                                    <field name="show_header"/>
+                                    <field
+                                            name="header_text"
+                                            attrs="{'invisible': [('show_header', '=', False)]}"
+                                    />
+                                </group>
+                                <group>
+                                    <field name="show_footer"/>
+                                    <field
+                                            name="footer_text"
+                                            attrs="{'invisible': [('show_footer', '=', False)]}"
+                                    />
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- TAB 3: RTL / Arabic -->
+                        <page string="RTL &amp; Arabic" name="rtl">
+                            <group>
+                                <field name="is_rtl"/>
+                                <field
+                                        name="rtl_font"
+                                        attrs="{'invisible': [('is_rtl', '=', False)],
+                                            'required': [('is_rtl', '=', True)]}"
+                                />
+                            </group>
+                        </page>
+
+                        <!-- TAB 4: Watermark -->
+                        <page string="Watermark" name="watermark">
+                            <group>
+                                <field name="show_watermark"/>
+                                <field
+                                        name="watermark_text"
+                                        attrs="{'invisible': [('show_watermark', '=', False)],
+                                            'required': [('show_watermark', '=', True)]}"
+                                />
+                                <field
+                                        name="watermark_opacity"
+                                        attrs="{'invisible': [('show_watermark', '=', False)]}"
+                                />
+                            </group>
+                        </page>
+
+                        <!-- TAB 5: Report Assignment -->
+                        <page string="Apply To" name="apply_to">
+                            <group>
+                                <field name="apply_to_invoice"/>
+                                <field name="apply_to_sale"/>
+                                <field name="apply_to_purchase"/>
+                            </group>
+                        </page>
+
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ==================== TREE VIEW ==================== -->
+    <record id="view_report_theme_profile_tree" model="ir.ui.view">
+        <field name="name">report.theme.profile.tree</field>
+        <field name="model">report.theme.profile</field>
+        <field name="arch" type="xml">
+            <tree string="Report Theme Profiles">
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="is_default"/>
+                <field name="font_family"/>
+                <field name="primary_color"/>
+                <field name="is_rtl"/>
+                <field name="apply_to_invoice"/>
+                <field name="apply_to_sale"/>
+                <field name="apply_to_purchase"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ==================== SEARCH VIEW ==================== -->
+    <record id="view_report_theme_profile_search" model="ir.ui.view">
+        <field name="name">report.theme.profile.search</field>
+        <field name="model">report.theme.profile</field>
+        <field name="arch" type="xml">
+            <search string="Search Themes">
+                <field name="name"/>
+                <field name="company_id"/>
+                <filter
+                        string="Default Themes"
+                        name="default_only"
+                        domain="[('is_default', '=', True)]"
+                />
+                <filter
+                        string="RTL Enabled"
+                        name="rtl_only"
+                        domain="[('is_rtl', '=', True)]"
+                />
+                <group expand="0" string="Group By">
+                    <filter
+                            string="Company"
+                            name="group_company"
+                            context="{'group_by': 'company_id'}"
+                    />
+                    <filter
+                            string="Font Family"
+                            name="group_font"
+                            context="{'group_by': 'font_family'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ==================== ACTION ==================== -->
+    <record id="action_report_theme_profile" model="ir.actions.act_window">
+        <field name="name">Report Themes</field>
+        <field name="res_model">report.theme.profile</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first report theme profile
+            </p>
+            <p>
+                Define branding, fonts, colors, watermarks and RTL settings
+                for your PDF reports.
+            </p>
+        </field>
+    </record>
+
+    <!-- ==================== MENU ==================== -->
+    <menuitem
+            id="menu_report_theme_root"
+            name="Report Themes"
+            sequence="90"
+    />
+    <menuitem
+            id="menu_report_theme_profiles"
+            name="Theme Profiles"
+            parent="menu_report_theme_root"
+            action="action_report_theme_profile"
+            sequence="10"
+    />
+
+</odoo>
